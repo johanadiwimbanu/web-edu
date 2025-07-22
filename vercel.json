@@ -24,6 +24,7 @@
         "APP_NAME": "EDU MATERIALS",
         "APP_ENV": "production",
         "APP_DEBUG": "false",
+        "APP_FORCE_HTTPS": "true",
         "APP_URL": "https://web-edu-lovat.vercel.app",
         "ASSET_URL": "https://web-edu-lovat.vercel.app",
         "APP_KEY": "base64:TGaVaXwhWgjn9akhE4SCSIjGG/cQqvICUQ+PgLA3Bs0=",
