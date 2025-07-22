@@ -9,7 +9,7 @@
         { "src": "/(.*)", "dest": "/api/index.php" }
     ],
     "public": true,
-    "buildCommand": "npm install && npm run build",
+    "buildCommand": "composer install && php artisan storage:link && php artisan migrate --force && npm install && npm run build && php artisan filament:assets",
     "outputDirectory": "public",
     "env": {
         "APP_ENV": "production",
