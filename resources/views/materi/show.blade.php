@@ -12,14 +12,30 @@
                     Tipe Materi: <span class="font-semibold">{{ ucfirst($materi->type) }}</span>
                 </p>
 
-                @if($materi->type === 'article')
+                @php
+                    $fileUrl = 'https://' . parse_url(env('SUPABASE_URL'), PHP_URL_HOST) . '/storage/v1/object/public/' . $materi->file_path;
+                @endphp
+
+                @if ($materi->type === 'article')
                     <div class="prose max-w-full">
                         {!! nl2br(e($materi->content)) !!}
                     </div>
+                @elseif ($materi->type === 'pdf')
+                    <iframe src="{{ $fileUrl }}" class="w-full h-[600px] border" frameborder="0"></iframe>
+                @elseif ($materi->type === 'video')
+                    <video controls class="w-full max-w-3xl rounded shadow">
+                        <source src="{{ $fileUrl }}" type="video/mp4">
+                        Browser tidak mendukung pemutaran video.
+                    </video>
+                @elseif ($materi->type === 'audio')
+                    <audio controls class="w-full mt-4">
+                        <source src="{{ $fileUrl }}" type="audio/mpeg">
+                        Browser tidak mendukung audio.
+                    </audio>
+                @elseif ($materi->type === 'image')
+                    <img src="{{ $fileUrl }}" alt="Gambar Materi" class="w-full max-w-md rounded shadow">
                 @else
-                    <a href="{{ asset('storage/' . $materi->file_path) }}"
-                       target="_blank"
-                       class="text-blue-600 hover:underline">
+                    <a href="{{ $fileUrl }}" target="_blank" class="text-blue-600 hover:underline">
                         Lihat / Unduh File
                     </a>
                 @endif

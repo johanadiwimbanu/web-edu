@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Helpers\SupabaseUploader;
 use App\Models\Material;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,9 +55,15 @@ class MateriController extends Controller
             'status' => 'pending',
         ];
 
-        if ($request->hasFile('file_path')) {
-            $data['file_path'] = $request->file('file_path')->store('materials', 'public');
+       if ($request->hasFile('file_path')) {
+        $uploaded = SupabaseUploader::upload($request->file('file_path'));
+
+        if (!$uploaded) {
+            return back()->withErrors(['file_path' => 'Gagal upload file ke Supabase']);
         }
+
+        $data['file_path'] = $uploaded;
+    }
 
         Material::create($data);
 

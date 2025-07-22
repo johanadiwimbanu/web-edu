@@ -3,7 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\MaterialResource\Pages;
-use App\Filament\Resources\MaterialResource\RelationManagers;
+use App\Helpers\SupabaseUploader;
 use App\Models\Material;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,20 +12,14 @@ use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class MaterialResource extends Resource
 {
     protected static ?string $model = Material::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    public static function mutateFormDataBeforeCreate(array $data): array
-    {
-        dd($data); // debug file_path
 
-        return $data;
-    }
     public static function form(Form $form): Form
     {
         return $form
@@ -45,7 +39,24 @@ class MaterialResource extends Resource
                 ->visible(fn ($get) => $get('type') === 'article'),
 
             Forms\Components\FileUpload::make('file_path')
-                ->visible(fn ($get) => $get('type') !== 'article'),
+                ->visible(fn ($get) => $get('type') !== 'article')
+                ->acceptedFileTypes(['application/pdf', 'image/*', 'video/*', 'audio/*'])
+                ->preserveFilenames()
+                ->getUploadedFileNameForStorageUsing(function ($file) {
+
+                    return Str::random(40) . '.' . $file->getClientOriginalExtension();
+                })
+                ->storeFiles(false) 
+                ->dehydrated(false) 
+                ->afterStateUpdated(function ($state, callable $set, callable $get, $record) {
+                    if ($state) {
+                        $file = $state;
+                        $path = SupabaseUploader::upload($file);
+                        if ($path) {
+                            $set('file_path', $path); 
+                        }
+                    }
+                }),
 
             Forms\Components\Select::make('status')
                 ->options([
