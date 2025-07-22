@@ -5,6 +5,8 @@
         "api/index.php": { "runtime": "vercel-php@0.6.0" }
     },
     "routes": [
+        //url assets
+        { "src": "/(css/js)/(.*)", "dest": "/public/$1/$2" },
         { "src": "/build/(.*)", "dest": "/public/build/" },
         { "src": "/(.*)", "dest": "/api/index.php" }
     ],
@@ -12,6 +14,7 @@
     "buildCommand": "vite build",
     "outputDirectory": "public",
     "env": {
+        "APP_NAME": "EDU MATERIALS",
         "APP_ENV": "production",
         "APP_DEBUG": "TRUE",
         "APP_URL": "web-lr1x0i5ex-johanadiwimbanus-projects.vercel.app",
@@ -24,7 +27,7 @@
         "VIEW_COMPILED_PATH": "/tmp",
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
-        "SESSION_DRIVER": "cookie",
+        "SESSION_DRIVER": "database",
         "DB_CONNECTION": "pgsql",
         "DB_HOST": "aws-0-ap-southeast-1.pooler.supabase.com",
         "DB_PORT": "6543",
