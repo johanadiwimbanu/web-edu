@@ -5,26 +5,57 @@
         "api/index.php": { "runtime": "vercel-php@0.6.0" }
     },
     "routes": [
-        { "src": "/build/(.*)", "dest": "/public/build/$1" },
-        { "src": "/css/(.*)", "dest": "/public/css/$1" },
-        { "src": "/js/(.*)", "dest": "/public/js/$1" },
+        {
+            "src": "/(.*)",
+            "headers": {
+                "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+                "X-Frame-Options": "SAMEORIGIN",
+                "X-Content-Type-Options": "nosniff"
+            },
+            "continue": true
+        },
+        {
+            "src": "/build/(.*)",
+            "dest": "/public/build/$1",
+            "headers": {
+                "cache-control": "public,max-age=31536000,immutable"
+            }
+        },
+        {
+            "src": "/css/(.*)",
+            "dest": "/public/css/$1",
+            "headers": {
+                "cache-control": "public,max-age=31536000"
+            }
+        },
+        {
+            "src": "/js/(.*)",
+            "dest": "/public/js/$1",
+            "headers": {
+                "cache-control": "public,max-age=31536000"
+            }
+        },
         { "src": "/assets/(.*)", "dest": "/public/assets/$1" },
         { "src": "/images/(.*)", "dest": "/public/images/$1" },
         { "src": "/storage/(.*)", "dest": "/storage/$1" },
         {
-            "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot))",
-            "dest": "/public/$1"
+            "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|map))",
+            "dest": "/public/$1",
+            "headers": {
+                "cache-control": "public,max-age=31536000"
+            }
         },
+        { "src": "/admin/(.*)", "dest": "/api/index.php" },
+        { "src": "/livewire/(.*)", "dest": "/api/index.php" },
         { "src": "/(.*)", "dest": "/api/index.php" }
     ],
-    "public": true,
-    "buildCommand": "npm run build",
-    "outputDirectory": "public",
+    "public": false,
+    "buildCommand": "npm ci && npm run build",
+    "installCommand": "npm ci",
     "env": {
         "APP_NAME": "EDU MATERIALS",
         "APP_ENV": "production",
         "APP_DEBUG": "false",
-        "APP_FORCE_HTTPS": "true",
         "APP_URL": "https://web-edu-lovat.vercel.app",
         "ASSET_URL": "https://web-edu-lovat.vercel.app",
         "APP_KEY": "base64:TGaVaXwhWgjn9akhE4SCSIjGG/cQqvICUQ+PgLA3Bs0=",
