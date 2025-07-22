@@ -55,7 +55,7 @@
     "env": {
         "APP_NAME": "EDU MATERIALS",
         "APP_ENV": "production",
-        "APP_DEBUG": "true",
+        "APP_DEBUG": "false",
         "APP_FORCE_HTTPS": "true",
         "APP_URL": "https://web-edu-lovat.vercel.app",
         "ASSET_URL": "https://web-edu-lovat.vercel.app",
@@ -73,6 +73,8 @@
         "DB_HOST": "aws-0-ap-southeast-1.pooler.supabase.com",
         "DB_PORT": "6543",
         "DB_DATABASE": "postgres",
-        "DB_USERNAME": "postgres.wexnmsrnefjtdwretggh"
+        "DB_USERNAME": "postgres.wexnmsrnefjtdwretggh",
+        "SUPABASE_URL": "https://wexnmsrnefjtdwretggh.supabase.co",
+        "SUPABASE_BUCKET": "materials"
     }
 }
